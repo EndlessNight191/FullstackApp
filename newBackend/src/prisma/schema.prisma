@@ -1,0 +1,34 @@
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:123456@127.0.0.1:5432/test_tusk_prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Item {
+  id       Int    @id @default(autoincrement())
+  title    String @unique
+  price    Int
+  description String
+  categories     CategoriesOnItems[]
+}
+
+model Category {
+  id       Int    @id @default(autoincrement())
+  title    String @unique
+  items    CategoriesOnItems[]
+}
+
+model CategoriesOnItems {
+  Item       Item     @relation(fields: [ItemId], references: [id])
+  ItemId     Int // relation scalar field (used in the `@relation` attribute above)
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([ItemId, categoryId])
+}
+
