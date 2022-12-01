@@ -1,6 +1,6 @@
 import {hash} from 'bcrypt';
 import {Item, PrismaClient} from '@prisma/client';
-import {CreateItemDto} from '@dtos/createdItemDto';
+import {CreateItemDto} from '@dtos/createdItem.dto';
 import {HttpException} from '@exceptions/HttpException';
 import {isEmpty} from '@utils/util';
 
@@ -60,13 +60,13 @@ class itemService {
   public async createItem(itemData: CreateItemDto): Promise<Item> {
     if (isEmpty(itemData)) throw new HttpException(400, "itemData is empty");
 
-    const findUser: Item = await this.items.findUnique({ where: { email: itemData.title } });
+    const findUser: Item = await this.items.findUnique({ where: { title: itemData.title } });
     if (findUser) throw new HttpException(409, `This title ${itemData.title} already exists`);
 
     const categories: categoryId = itemData.categoriesId.map(item => {return {id: item}});
     delete itemData.categoriesId;
     itemData.CategoriesOnItems = {connect: categories}; // вынести в utils?
-    const createdItemData: Item = await this.items.create({ data: {itemData} });
+    const createdItemData: Item = await this.items.create({ data: itemData });
     return createdItemData;
   }
 
@@ -87,8 +87,16 @@ class itemService {
       }
     })
 
-    const updateUserData = await this.items.update({ where: { id: itemId }, data: {itemData}});
-    return updateUserData;
+    const updateItemData = await this.items.update({ where: { id: itemId }, data: {itemData}});
+    return updateItemData;
+  }
+
+  public async updateItemImage(itemId: number, imageName: string){
+    const findItem: Item = await this.items.findUnique({ where: { id: itemId } });
+    if (!findItem) throw new HttpException(409, "User doesn't exist");
+
+    const updateItemData = await this.items.update({ where: { id: itemId }, data: {image: imageName}});
+    return updateItemData;
   }
 
 }

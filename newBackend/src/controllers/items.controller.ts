@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreatedItemDto } from '@dtos/createdItemDto';
+import { CreatedItemDto } from '@dtos/createdItem.dto';
 import { Item } from '@prisma/client';
 import itemService from '@services/items.service';
 import catchAsync from "@utils/catchAsync";
@@ -10,7 +10,7 @@ class ItemsController {
   public itemService = new itemService();
 
   public getItems = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const {take: number, skip: number} = pagination(req.query.limit, req.query.page);
+    const {take, skip} = pagination(req.query.limit, req.query.page);
     const items: Item[] = await this.itemService.getItems(take, skip);
     return resSend(res, {data: {items: items}});
   })
@@ -21,7 +21,7 @@ class ItemsController {
   })
 
   public getItemsByCategories = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const {take: number, skip: number} = pagination(req.query.limit, req.query.page);
+    const {take, skip} = pagination(req.query.limit, req.query.page);
     const items: Item = await this.itemService.getItemsByCategory(req.body.categoriesId, take, skip);
     return resSend(res, {data: {items: items}});
   })
@@ -33,6 +33,11 @@ class ItemsController {
 
   public updateItem = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const item: Item = await this.itemService.updateItem(req.params.id, req.body);
+    return resSend(res, {data: {item: item}});
+  })
+
+  public updateItemImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const item: Item = await this.itemService.updateItemImage(req.params.id, req.body.image);
     return resSend(res, {data: {item: item}});
   })
 

@@ -10,9 +10,6 @@ export class CreatedItemDto {
   @IsString()
   public description: string;
 
-  @IsString()
-  public image?: any;
-
   @IsArray()
   public categoriesId?: number[];
 }
