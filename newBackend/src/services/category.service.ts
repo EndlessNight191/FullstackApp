@@ -1,5 +1,5 @@
 import {Category, PrismaClient} from '@prisma/client';
-import {categoryDto} from '@dtos/category.dto';
+import {CategoryDto} from '@dtos/category.dto';
 import {HttpException} from '@exceptions/HttpException';
 import {isEmpty} from '@utils/util';
 
@@ -14,7 +14,7 @@ class categoryService {
     });
   }
 
-  public async createCategory(categoryData: categoryDto): Promise<Category> {
+  public async createCategory(categoryData: CategoryDto): Promise<Category> {
     if (isEmpty(categoryData)) throw new HttpException(400, "сategoryData is empty");
 
     const findUser: Category = await this.category.findUnique({ where: { title: categoryData.title } });
@@ -23,8 +23,8 @@ class categoryService {
     return await this.category.create({data: categoryData});
   }
 
-  public async updateCategory(categoryId: number, categoryData: categoryDto): Promise<Category> {
-    if (isEmpty(itemData)) throw new HttpException(400, "userData is empty");
+  public async updateCategory(categoryId: number, categoryData: CategoryDto): Promise<Category> {
+    if (isEmpty(categoryData)) throw new HttpException(400, "userData is empty");
 
     const findCategory: Category = await this.category.findUnique({ where: { id: categoryId } });
     if (!findCategory) throw new HttpException(409, "Category doesn't exist");

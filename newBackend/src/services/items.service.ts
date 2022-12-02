@@ -1,10 +1,11 @@
 import {Item, PrismaClient} from '@prisma/client';
-import {CreateItemDto} from '@dtos/createdItem.dto';
+import {CreatedItemDto} from '@dtos/createdItem.dto';
+import {UpdateItemDto} from '@dtos/updateItem.dto';
 import {HttpException} from '@exceptions/HttpException';
 import {isEmpty} from '@utils/util';
 
 interface categoryId {
-  id: number
+  categoryId: number
 }
 
 // Создать models и работу с бд вынести в отдельные классы
@@ -16,8 +17,8 @@ class itemService {
       take: take,
       skip: skip,
       include: {
-        CategoriesOnItems: {
-          include: {Category: true}
+        categories: {
+          include: {category: true}
         }
       },
     });
@@ -28,26 +29,26 @@ class itemService {
       take: take,
       skip: skip,
       where: {
-        CategoriesOnItems: {
-          Category: {id: {in: categoriesId}}
+        categories: {
+          some: {
+            categoryId: {in: categoriesId}
+          }
         }
       },
       include: {
-        CategoriesOnItems: {
-          include: {Category: true}
+        categories: {
+          include: {category: true}
         }
       },
     })
   }
 
   public async findItemById(itemId: number): Promise<Item> {
-    console.log(itemId)
     if (isEmpty(itemId)) throw new HttpException(400, "itemId is empty");
-    console.log(itemId)
     const item: Item = await this.items.findUnique({
       where: { id: itemId },
       include: {
-        CategoriesOnItems: {
+        categories: {
           include: {category: true}
         }
       },
@@ -56,39 +57,36 @@ class itemService {
     return item;
   }
 
-  public async createItem(itemData: CreateItemDto): Promise<Item> {
+  public async createItem(itemData: CreatedItemDto): Promise<Item> {
     if (isEmpty(itemData)) throw new HttpException(400, "itemData is empty");
     const findItem: Item = await this.items.findUnique({ where: { title: itemData.title } });
     if (findItem) throw new HttpException(409, `This title ${itemData.title} already exists`);
 
-    if(itemData.categoriesId){
-      const categories: categoryId[] = itemData.categoriesId.map(item => {return {id: item}});
+    if(itemData.categoriesId){ // вынести в utils?
+      const categoriesMany: categoryId[] = itemData.categoriesId.map(item => {return {categoryId: item}});
+      var categories = {createMany: {data: JSON.parse(JSON.stringify(categoriesMany))}};
       delete itemData.categoriesId;
-      categories.length > 0 ? itemData.CategoriesOnItems = {connect: categories} : false // вынести в utils?
     }
-    return this.items.create({data: itemData});
+    return this.items.create({data: {...itemData, categories}});
   }
 
-  public async updateItem(itemId: number, itemData: CreateItemDto): Promise<Item> {
+  public async updateItem(itemId: number, itemData: UpdateItemDto): Promise<Item> {
     if (isEmpty(itemData)) throw new HttpException(400, "userData is empty");
 
     const findItem: Item = await this.items.findUnique({ where: { id: itemId } });
     if (!findItem) throw new HttpException(409, "User doesn't exist");
-    console.log(itemData)
-    if(itemData.categoriesId){
-      const categories: categoryId = itemData.categoriesId.map(item => {return {id: item}});
+    if(itemData.categoriesId){ // вынести в utils?
+      const categoriesMany: categoryId[] = itemData.categoriesId.map(item => {return {categoryId: item}});
+      var categories = {createMany: {data: JSON.parse(JSON.stringify(categoriesMany))}};
       delete itemData.categoriesId;
-      itemData.CategoriesOnItems = {connect: categories}; // вынести в utils?
       // удалить связанные записи перед этим
       await this.items.update({
         where: {id: itemId},
-        data: {
-          CategoriesOnItems: {deleteMany: {}},
-        }
+        data: { categories: {deleteMany: {}}}
       })
     }
 
-    return this.items.update({where: {id: itemId}, data: {itemData}});
+    return this.items.update({where: {id: itemId}, data: {...itemData, categories}});
   }
 
   public async updateItemImage(itemId: number, imageName: string){
