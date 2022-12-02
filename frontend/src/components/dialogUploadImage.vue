@@ -3,7 +3,7 @@
     <div @click.stop class="dialog__content">
       <h3>Загрузить картинку</h3>
       <div class="input-group mb-3">
-        <input type="file" class="form-control" id="inputGroupFile02">
+        <input type="file" class="form-control" id="inputGroupFile02" accept="image/jpeg" @change=changeUploadImage >
         <label class="input-group-text" for="inputGroupFile02">Загрузка</label>
       </div>
       <button class="btn btn-primary btm--margin" @click="uploadImage">Загрузить картинку</button>
@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "dialogUploadImage",
   data(){
@@ -33,8 +35,22 @@ export default {
       this.image = '';
       this.$emit('update:show', false)
     },
-    uploadImage(){
-
+    async changeUploadImage(e){
+      this.image = e.target.files[0]
+    },
+    async uploadImage(){
+      let data = new FormData();
+      data.append('image', this.image);
+      await axios.put(process.env.BACKEND_URL + `api/items/image/${this.itemId}`, data)
+          .then(() => {
+            this.image = ''
+            this.$emit('update:show', false);
+            this.$router.go(this.$router.currentRoute);
+          })
+          .catch(e => {
+            alert('запрос с ошибкой')
+            console.log(e)
+          })
     }
   }
 }

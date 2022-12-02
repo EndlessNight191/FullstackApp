@@ -1,7 +1,7 @@
 <template>
   <div class="dialog" v-if="show" @click.stop="hideDialog">
     <div @click.stop class="dialog__content">
-      <h3>Создание товара</h3>
+      <h3>Обновление товара</h3>
       <div class="input-group flex-nowrap">
         <span class="input-group-text" id="addon-wrapping">title</span>
         <input type="text" class="form-control" v-model="items.title" placeholder="title" aria-describedby="addon-wrapping">
@@ -15,6 +15,7 @@
         <input type="number" class="form-control" v-model="items.price" placeholder="price" aria-describedby="addon-wrapping">
       </div>
       <button class="btn btn-primary btm--margin" @click="updateItem">Обновить товар</button>
+      <h3 v-if="visible" style="color: purple; margin: 10% auto; width: 50%; font-size: 25px">У вас пусто</h3>
     </div>
   </div>
 </template>
@@ -39,22 +40,17 @@ export default {
   },
   methods: {
     hideDialog() {
-      this.items.title = '';
-      this.items.description = '';
-      this.items.price = 0;
       this.$emit('update:show', false)
     },
     async updateItem(){
-      if(this.item === this.items){
+      if(!this.item.title || !this.item.description || !this.item.price){
         this.visible = true
         return
       }
       await axios.put(process.env.BACKEND_URL + `api/items/${this.item.id}`, this.title)
           .then(() => {
-            this.items.title = '';
-            this.items.description = '';
-            this.items.price = 0;
             this.$emit('update:show', false);
+            this.$router.go(this.$router.currentRoute);
           })
           .catch(e => {
             alert('запрос с ошибкой')

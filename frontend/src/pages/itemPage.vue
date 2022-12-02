@@ -6,7 +6,7 @@
       <button class="btn btn-primary btm--margin" @click="dialogVisibleUploadImage=true">Загрузить картинку</button>
     </div>
   </div>
-  <dialogUpdateItem :item="item" v-model:show="dialogVisibleUpdateItem"/>
+  <dialogUpdateItem  :item="item" v-model:show="dialogVisibleUpdateItem"/>
   <dialogUploadImage :itemId="item.id" v-model:show="dialogVisibleUploadImage"/>
 </template>
 

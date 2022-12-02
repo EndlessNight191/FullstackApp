@@ -44,6 +44,7 @@ export default {
           .then(() => {
             this.title = '';
             this.$emit('update:show', false);
+            this.$router.go(this.$router.currentRoute);
           })
           .catch(e => {
             alert('запрос с ошибкой')
