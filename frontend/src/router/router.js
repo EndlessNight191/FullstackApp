@@ -1,15 +1,15 @@
-import MenuPage from '@/pages/menuPage';
-import ItemPage from '@/pages/itemPage';
+import menuPage from "@/pages/menuPage";
+import itemPage from "@/pages/itemPage";
 import {createWebHistory, createRouter} from "vue-router";
 
 const routes = [
     {
         path: '/',
-        component: MenuPage
+        component: menuPage
     },
     {
         path: '/item/:id',
-        component: ItemPage
+        component: itemPage
     }
 ]
 

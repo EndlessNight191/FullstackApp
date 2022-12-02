@@ -1,12 +1,11 @@
 <template>
-  <div>
-
+  <div class="container menu">
   </div>
 </template>
 
 <script>
 export default {
-  name: "menuItems"
+  name: "menuPage"
 }
 </script>
 

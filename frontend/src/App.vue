@@ -5,6 +5,7 @@
 
 <script>
 import myHeader from './components/myHeader.vue'
+import '@/assets/main.css'
 
 export default {
   name: 'App',
