@@ -1,11 +1,18 @@
-import {Category, PrismaClient} from '@prisma/client';
-import {CategoryDto} from '@dtos/category.dto';
-import {HttpException} from '@exceptions/HttpException';
-import {isEmpty} from '@utils/util';
+import { Category, PrismaClient } from "@prisma/client";
+import { CategoryDto } from "@dtos/category.dto";
+import { HttpException } from "@exceptions/HttpException";
+import { isEmpty } from "@utils/util";
 
 // Создать models и работу с бд вынести в отдельные классы
 class categoryService {
   public category = new PrismaClient().category;
+
+  public async checkCategories(idArray: number[]): Promise<void> {
+    const count =  await this.category.count({ where: {
+        id: { in: idArray },
+      }})
+    if(idArray.length !== count) throw new HttpException(400, "idCategory not find");
+  }
 
   public async getCategories(take: number, skip: number): Promise<Category[]> {
     return await this.category.findMany({

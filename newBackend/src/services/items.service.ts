@@ -3,6 +3,7 @@ import {CreatedItemDto} from '@dtos/createdItem.dto';
 import {UpdateItemDto} from '@dtos/updateItem.dto';
 import {HttpException} from '@exceptions/HttpException';
 import {isEmpty} from '@utils/util';
+import CategoryService from '@services/category.service'
 
 interface categoryId {
   categoryId: number
@@ -11,6 +12,7 @@ interface categoryId {
 // Создать models и работу с бд вынести в отдельные классы
 class itemService {
   public items = new PrismaClient().item;
+  public categoriesService = new CategoryService()
 
   public async getItems(take: number, skip: number): Promise<Item[]> {
     return this.items.findMany({
@@ -63,6 +65,7 @@ class itemService {
     if (findItem) throw new HttpException(409, `This title ${itemData.title} already exists`);
 
     if(itemData.categoriesId){ // вынести в utils?
+      await this.categoriesService.checkCategories(itemData.categoriesId)
       const categoriesMany: categoryId[] = itemData.categoriesId.map(item => {return {categoryId: item}});
       var categories = {createMany: {data: JSON.parse(JSON.stringify(categoriesMany))}};
       delete itemData.categoriesId;
@@ -76,6 +79,7 @@ class itemService {
     const findItem: Item = await this.items.findUnique({ where: { id: itemId } });
     if (!findItem) throw new HttpException(409, "User doesn't exist");
     if(itemData.categoriesId){ // вынести в utils?
+      await this.categoriesService.checkCategories(itemData.categoriesId)
       const categoriesMany: categoryId[] = itemData.categoriesId.map(item => {return {categoryId: item}});
       var categories = {createMany: {data: JSON.parse(JSON.stringify(categoriesMany))}};
       delete itemData.categoriesId;
