@@ -12,13 +12,16 @@ model Item {
   title    String @unique
   price    Int
   description String
+  image String?
   categories     CategoriesOnItems[]
+  assignedAt DateTime @default(now())
 }
 
 model Category {
   id       Int    @id @default(autoincrement())
   title    String @unique
   items    CategoriesOnItems[]
+  assignedAt DateTime @default(now())
 }
 
 model CategoriesOnItems {

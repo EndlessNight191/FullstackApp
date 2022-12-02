@@ -65,7 +65,7 @@ class itemService {
     if (findItem) throw new HttpException(409, `This title ${itemData.title} already exists`);
 
     if(itemData.categoriesId){ // вынести в utils?
-      await this.categoriesService.checkCategories(itemData.categoriesId)
+      await this.categoriesService.checkCategories(itemData.categoriesId);
       const categoriesMany: categoryId[] = itemData.categoriesId.map(item => {return {categoryId: item}});
       var categories = {createMany: {data: JSON.parse(JSON.stringify(categoriesMany))}};
       delete itemData.categoriesId;

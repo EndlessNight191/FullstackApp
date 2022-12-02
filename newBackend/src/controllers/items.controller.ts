@@ -37,7 +37,8 @@ class ItemsController {
   })
 
   public updateItemImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const item: Item = await this.itemService.updateItemImage(Number(req.params.id), req.body.image);
+    console.log(req.files)
+    const item: Item = await this.itemService.updateItemImage(Number(req.params.id), req.files[0].filename);
     return resSend(res, {data: {item: item}});
   })
 
