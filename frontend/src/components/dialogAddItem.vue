@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "dialogAddItem",
   data(){
@@ -41,13 +43,24 @@ export default {
   },
   methods: {
     hideDialog() {
-      this.item.title = '';
-      this.item.description = '';
-      this.item.price = 0;
       this.$emit('update:show', false);
     },
-    addItem(){
-
+    async addItem(){
+      if(!this.item.title || !this.item.description || !this.item.price){
+        this.visible = true
+        return
+      }
+      await axios.post(process.env.BACKEND_URL + 'api/items', this.item)
+          .then(() => {
+            this.item.title = '';
+            this.item.description = '';
+            this.item.price = 0;
+            this.$emit('update:show', false);
+          })
+          .catch(e => {
+            alert('запрос с ошибкой')
+            console.log(e)
+          })
     }
   }
 }

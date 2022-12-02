@@ -2,7 +2,7 @@
   <div class="container menu">
     <itemCard v-for="item of items" :key="item.id" :item="item"/>
   </div>
-  <button class="btn btn-primary" style="margin-bottom: 10px">Загрузить еще</button>
+  <button class="btn btn-primary" style="margin-bottom: 10px" @click="addItem">Загрузить еще</button>
 </template>
 
 <script>
@@ -19,6 +19,19 @@ export default {
       limit: 8,
       page: 1,
       items: []
+    }
+  },
+  methods: {
+    async addItem(){
+      this.page++
+      await axios.get(process.env.BACKEND_URL + 'api/items', {params: {limit: this.limit, page: this.page}})
+          .then(res => {
+            this.items = [...this.items, ...res.data.data.items]
+          })
+          .catch(e => {
+            alert('Ошибка запроса')
+            console.log(e)
+          })
     }
   },
   async created() {

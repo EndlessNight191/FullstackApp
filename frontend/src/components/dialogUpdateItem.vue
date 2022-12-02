@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "dialogUpdateItem",
   data(){
@@ -37,10 +39,27 @@ export default {
   },
   methods: {
     hideDialog() {
+      this.items.title = '';
+      this.items.description = '';
+      this.items.price = 0;
       this.$emit('update:show', false)
     },
-    updateItem(){
-
+    async updateItem(){
+      if(this.item === this.items){
+        this.visible = true
+        return
+      }
+      await axios.put(process.env.BACKEND_URL + `api/items/${this.item.id}`, this.title)
+          .then(() => {
+            this.items.title = '';
+            this.items.description = '';
+            this.items.price = 0;
+            this.$emit('update:show', false);
+          })
+          .catch(e => {
+            alert('запрос с ошибкой')
+            console.log(e)
+          })
     }
   }
 }

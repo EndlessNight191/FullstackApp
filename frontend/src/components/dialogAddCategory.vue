@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "dialogAddCategory",
   data(){
@@ -32,8 +34,16 @@ export default {
       this.title = ''
       this.$emit('update:show', false)
     },
-    addCategory(){
-
+    async addCategory(){
+      await axios.post(process.env.BACKEND_URL + 'api/category', {title: this.title})
+          .then(() => {
+            this.title = ''
+            this.$emit('update:show', false)
+          })
+          .catch(e => {
+            alert('запрос с ошибкой')
+            console.log(e)
+          })
     }
   }
 }

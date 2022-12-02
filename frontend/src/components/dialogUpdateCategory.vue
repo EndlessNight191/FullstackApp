@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "dialogUpdateCategory",
   data(){
@@ -23,6 +25,7 @@ export default {
   },
   props: {
     titles: String,
+    categoryId: Number,
     show:{
       type: Boolean,
       default: false,
@@ -30,11 +33,22 @@ export default {
   },
   methods: {
     hideDialog() {
-      this.title = ''
       this.$emit('update:show', false)
     },
-    updateItem(){
-
+    async updateItem(){
+      if(this.title === this.titles){
+        this.visible = true
+        return
+      }
+      await axios.put(process.env.BACKEND_URL + `api/category/${this.categoryId}`, {title: this.title})
+          .then(() => {
+            this.title = '';
+            this.$emit('update:show', false);
+          })
+          .catch(e => {
+            alert('запрос с ошибкой')
+            console.log(e)
+          })
     }
   }
 }

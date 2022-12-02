@@ -1,6 +1,6 @@
 <template>
   <button  class="btn btn-dark" @click="dialogVisibleUpdateCategory=true">{{this.category.category.title}}</button>
-  <dialogUpdateCategory v-model:show="dialogVisibleUpdateCategory"/>
+  <dialogUpdateCategory v-model:show="dialogVisibleUpdateCategory" :categoryId="category.category.id" :titles="this.category.category.title"/>
 </template>
 
 <script>
