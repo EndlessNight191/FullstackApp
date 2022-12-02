@@ -1,6 +1,6 @@
 <template>
   <div class="card card-custom">
-    <img :src="linkImage" class="card-img-top" alt="картинка не загрузилась">
+    <img  crossorigin="anonymous" :src="linkImage" class="card-img-top img" alt="картинка не загрузилась">
     <div class="card-body">
       <h5 class="card-title">{{ item.title }}</h5>
       <p class="card-text">{{item.description}}</p>
@@ -26,7 +26,7 @@ export default {
   },
   data(){
     return{
-      linkImage: this.item?.image || ''
+      linkImage: process.env.BACKEND_URL + 'uploads/' + (this.item.image || 'plug.jpg')
     }
   }
 }

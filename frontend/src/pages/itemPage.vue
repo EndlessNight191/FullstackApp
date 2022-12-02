@@ -1,6 +1,10 @@
 <template>
   <div class="container item-page">
-    <itemCard :item="item"/>
+    <itemCard v-if="see" :item="item"/>
+    <div class="btn-item--page">
+      <button class="btn btn-primary btm--margin">Изменить карточку товара</button>
+      <button class="btn btn-primary btm--margin">Загрузить картинку</button>
+    </div>
   </div>
 </template>
 
@@ -15,13 +19,14 @@ export default {
   },
   data(){
     return{
-      item: ''
+      item: '',
+      see: false
     }
   },
   async created() {
     await axios.get(process.env.BACKEND_URL + `api/items/${this.$route.params.id}`)
         .then(res => {
-          console.log(res)
+          this.see = true
           this.item = res.data.data.item
         })
         .catch(e => {
