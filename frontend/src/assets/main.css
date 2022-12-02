@@ -67,3 +67,19 @@
     height: 350px;
     width: 100%;
 }
+
+.drop--list{
+    color: white;
+    font-weight: 700;
+    margin: 15px auto 0;
+    width: 25%;
+    font-size: 20px;
+    background-color: darkgray;
+    border-radius: 15px;
+}
+
+.option{
+    background-color: darkgray;
+    color: #212529;
+    font-size: 16px;
+}

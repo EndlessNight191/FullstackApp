@@ -7,7 +7,7 @@
         <label class="input-group-text" for="inputGroupFile02">Загрузка</label>
       </div>
       <button class="btn btn-primary btm--margin" @click="uploadImage">Загрузить картинку</button>
-      <h3 v-if="visible" style="color: purple; margin: 10% auto; width: 50%; font-size: 25px">Выберите все пункты!!!</h3>
+      <h3 v-if="visible" style="color: purple; margin: 10% auto; width: 50%; font-size: 25px">Выберите отя бы один файл</h3>
     </div>
   </div>
 </template>
@@ -39,6 +39,10 @@ export default {
       this.image = e.target.files[0]
     },
     async uploadImage(){
+      if(!this.image){
+        this.visible = true;
+        return
+      }
       let data = new FormData();
       data.append('image', this.image);
       await axios.put(process.env.BACKEND_URL + `api/items/image/${this.itemId}`, data)

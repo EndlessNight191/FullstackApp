@@ -14,6 +14,16 @@
         <span class="input-group-text" id="addon-wrapping">$</span>
         <input type="number" class="form-control" v-model="items.price" placeholder="price" aria-describedby="addon-wrapping">
       </div>
+      <span>Если вы выберите хоть один тэг, то существующие удаляться, все выбранные теги добавятся к товару</span>
+      <div id="v-model-select-dynamic" class="drop--list">
+        <select v-model="selected">
+          <option value="Все категории">Все категории</option>
+          <option v-for="category in categories" :key="category.id" class="option">
+            {{ category.title }}
+          </option>
+        </select>
+        <span style="margin-left: 10px; font-size: 20px">Выбрано: {{ selected }}</span>
+      </div>
       <button class="btn btn-primary btm--margin" @click="updateItem">Обновить товар</button>
       <h3 v-if="visible" style="color: purple; margin: 10% auto; width: 50%; font-size: 25px">У вас пусто</h3>
     </div>
@@ -27,6 +37,8 @@ export default {
   name: "dialogUpdateItem",
   data(){
     return{
+      selected: '',
+      categories: [],
       items: this.item,
       visible: false,
     }
@@ -37,6 +49,16 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  async created() {
+    await axios.get(process.env.BACKEND_URL + 'api/category')
+        .then(res => {
+          this.categories = res.data.data.categories
+        })
+        .catch(e => {
+          alert('Ошибка запроса')
+          console.log(e)
+        })
   },
   methods: {
     hideDialog() {
@@ -56,6 +78,11 @@ export default {
             alert('запрос с ошибкой')
             console.log(e)
           })
+    }
+  },
+  watch: {
+    selected(newValue){
+      this.items.categoriesId = this.items.categoriesId ? [...this.items.categoriesId, newValue] : [newValue]
     }
   }
 }
