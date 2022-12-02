@@ -5,7 +5,8 @@
     "lib": [
       "es2017",
       "esnext.asynciterable",
-      "es2015.iterable"
+      "es2015.iterable",
+      "dom"
     ],
     "typeRoots": ["node_modules/@types"],
     "allowSyntheticDefaultImports": true,

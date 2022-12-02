@@ -6,6 +6,7 @@ import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import uploadPhoto from "@utils/uploadPhoto";
 import {UploadImageDto} from "@dtos/uploadImage.dto";
+import authMiddleware from "@middlewares/auth.middleware";
 
 class ItemsRoute implements Routes {
   public path = '/items';
@@ -21,9 +22,9 @@ class ItemsRoute implements Routes {
     this.router.get(`${this.path}/:id(\\d+)`, this.itemsController.getItem);
     this.router.patch(`${this.path}/category`, this.itemsController.getItemsByCategories);
 
-    this.router.post(`${this.path}`, validationMiddleware(CreatedItemDto, 'body'), this.itemsController.createItem);
-    this.router.put(`${this.path}/:id(\\d+)`, validationMiddleware(UpdateItemDto, 'body', true), this.itemsController.updateItem);
-    this.router.put(`${this.path}/image/:id(\\d+)`, uploadPhoto.any('file'), validationMiddleware(UploadImageDto, 'body', true), this.itemsController.updateItemImage);
+    this.router.post(`${this.path}`, authMiddleware, validationMiddleware(CreatedItemDto, 'body'), this.itemsController.createItem);
+    this.router.put(`${this.path}/:id(\\d+)`, authMiddleware, validationMiddleware(UpdateItemDto, 'body', true), this.itemsController.updateItem);
+    this.router.put(`${this.path}/image/:id(\\d+)`, authMiddleware, uploadPhoto.any('file'), validationMiddleware(UploadImageDto, 'body', true), this.itemsController.updateItemImage);
   }
 }
 
