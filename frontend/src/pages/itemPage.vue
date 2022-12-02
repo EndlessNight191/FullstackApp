@@ -1,12 +1,17 @@
 <template>
-  <div class="container">
-    <!-- Content here -->
+  <div class="container item-page">
+    <itemCard />
   </div>
 </template>
 
 <script>
+import itemCard from "@/components/itemCard";
+
 export default {
-  name: "itemPage"
+  name: "itemPage",
+  components: {
+    itemCard
+  }
 }
 </script>
 
