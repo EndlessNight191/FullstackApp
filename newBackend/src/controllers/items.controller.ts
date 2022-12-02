@@ -10,19 +10,19 @@ class ItemsController {
   public itemService = new itemService();
 
   public getItems = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const {take, skip} = pagination(req.query.limit, req.query.page);
+    const {take, skip} = pagination(Number(req.query.limit), Number(req.query.page));
     const items: Item[] = await this.itemService.getItems(take, skip);
     return resSend(res, {data: {items: items}});
   })
 
   public getItem = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const item: Item = await this.itemService.getItem(req.params.id);
+    const item: Item = await this.itemService.findItemById(Number(req.params.id));
     return resSend(res, {data: {item: item}});
   })
 
   public getItemsByCategories = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const {take, skip} = pagination(req.query.limit, req.query.page);
-    const items: Item = await this.itemService.getItemsByCategory(req.body.categoriesId, take, skip);
+    const {take, skip} = pagination(Number(req.query.limit), Number(req.query.page));
+    const items: Item[] = await this.itemService.getItemsByCategory(req.body.categoriesId, take, skip);
     return resSend(res, {data: {items: items}});
   })
 
@@ -32,12 +32,12 @@ class ItemsController {
   })
 
   public updateItem = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const item: Item = await this.itemService.updateItem(req.params.id, req.body);
+    const item: Item = await this.itemService.updateItem(Number(req.params.id), req.body);
     return resSend(res, {data: {item: item}});
   })
 
   public updateItemImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const item: Item = await this.itemService.updateItemImage(req.params.id, req.body.image);
+    const item: Item = await this.itemService.updateItemImage(Number(req.params.id), req.body.image);
     return resSend(res, {data: {item: item}});
   })
 
