@@ -1,5 +1,5 @@
 <template>
-  <div class="card card-custom" style="width: 18rem;">
+  <div class="card card-custom">
     <img :src="linkImage" class="card-img-top" alt="картинка не загрузилась">
     <div class="card-body">
       <h5 class="card-title">Название карточки</h5>
