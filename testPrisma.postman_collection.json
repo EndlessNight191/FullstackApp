@@ -1,0 +1,303 @@
+{
+	"info": {
+		"_postman_id": "39b3794c-1f78-4259-b5dd-b56a2e9b85b0",
+		"name": "testPrisma",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19731298"
+	},
+	"item": [
+		{
+			"name": "catygory",
+			"item": [
+				{
+					"name": "Получение всех категорий",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/category",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Добавленеи категории",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Булочное\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/category",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Обновление категории по id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Бургеры\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/category/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"category",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "items",
+			"item": [
+				{
+					"name": "Получение всех товаров",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение товара по id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/items/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"items",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Обновление товара по id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"rfhnjirfas\",\r\n    \"description\": \"Бургерasd\",\r\n    \"price\": 250,\r\n    \"categoriesId\": [2] \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/items/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"items",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Добавление товара",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Хрень\",\r\n    \"description\": \"Бу4323ргер\",\r\n    \"price\": 250,\r\n    \"categoriesId\": [1] \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение предметов по id категориям",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoriesId\": [2]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/items/category",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"items",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Обновление картинки",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/C:/Users/влад/OneDrive/Рабочий стол/asd.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/items/image/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"items",
+								"image",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Авторизация",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/auth",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
