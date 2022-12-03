@@ -7,6 +7,8 @@ A brief description of what this project does and who it's for
 
 ## Start
 
+"серктный" код для авторизации вшит в файе, auth.middleware и auth.controller - "admin"
+
 To deploy this project run
 
 ```bash
@@ -25,10 +27,11 @@ Install my-project with npm
 ```bash
   npm i
 ```
-запуск миграции
+запуск миграций, сидов
 ```bash
   npm run prisma:generate
   npm run prisma:migrate
+  npm run prisma:seeds
 ```
 
 ## .env
