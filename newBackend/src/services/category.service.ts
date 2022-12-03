@@ -11,7 +11,7 @@ class categoryService {
     const count =  await this.category.count({ where: {
         id: { in: idArray },
       }})
-    if(idArray.length !== count) throw new HttpException(400, "idCategory not find");
+    if(idArray.length !== count) new HttpException(400, "idCategory not find");
   }
 
   public async getCategories(take: number, skip: number): Promise<Category[]> {
@@ -22,7 +22,7 @@ class categoryService {
   }
 
   public async createCategory(categoryData: CategoryDto): Promise<Category> {
-    if (isEmpty(categoryData)) throw new HttpException(400, "сategoryData is empty");
+    if (isEmpty(categoryData)) new HttpException(400, "сategoryData is empty");
 
     const findUser: Category = await this.category.findUnique({ where: { title: categoryData.title } });
     if (findUser) throw new HttpException(409, `This title ${categoryData.title} already exists`);
@@ -31,10 +31,10 @@ class categoryService {
   }
 
   public async updateCategory(categoryId: number, categoryData: CategoryDto): Promise<Category> {
-    if (isEmpty(categoryData)) throw new HttpException(400, "userData is empty");
+    if (isEmpty(categoryData)) new HttpException(400, "userData is empty");
 
     const findCategory: Category = await this.category.findUnique({ where: { id: categoryId } });
-    if (!findCategory) throw new HttpException(409, "Category doesn't exist");
+    if (!findCategory) new HttpException(409, "Category doesn't exist");
 
     return await this.category.update({where: {id: categoryId}, data: categoryData});
   }

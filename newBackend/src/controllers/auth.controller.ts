@@ -10,7 +10,7 @@ class AuthController {
     if (!isProvided) throw new HttpException(401, "Token not provided");
     const providedToken = req.headers.authorization.split(' ')[1];
 
-    if(providedToken !== 'admin') throw new HttpException(401, "Token not accept"); // вынести в env password
+    if(providedToken !== 'admin') new HttpException(401, "Token not accept"); // вынести в env password
     return resSend(res, {data: {auth: true}});
   })
 

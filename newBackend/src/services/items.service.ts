@@ -46,7 +46,7 @@ class itemService {
   }
 
   public async findItemById(itemId: number): Promise<Item> {
-    if (isEmpty(itemId)) throw new HttpException(400, "itemId is empty");
+    if (isEmpty(itemId)) new HttpException(400, "itemId is empty");
     const item: Item = await this.items.findUnique({
       where: { id: itemId },
       include: {
@@ -55,14 +55,14 @@ class itemService {
         }
       },
     });
-    if (!item) throw new HttpException(409, "Item doesn't exist");
+    if (!item) new HttpException(409, "Item doesn't exist");
     return item;
   }
 
   public async createItem(itemData: CreatedItemDto): Promise<Item> {
-    if (isEmpty(itemData)) throw new HttpException(400, "itemData is empty");
+    if (isEmpty(itemData)) new HttpException(400, "itemData is empty");
     const findItem: Item = await this.items.findUnique({ where: { title: itemData.title } });
-    if (findItem) throw new HttpException(409, `This title ${itemData.title} already exists`);
+    if (findItem) new HttpException(409, `This title ${itemData.title} already exists`);
 
     if(itemData.categoriesId){ // вынести в utils?
       await this.categoriesService.checkCategories(itemData.categoriesId);
@@ -74,10 +74,10 @@ class itemService {
   }
 
   public async updateItem(itemId: number, itemData: UpdateItemDto): Promise<Item> {
-    if (isEmpty(itemData)) throw new HttpException(400, "userData is empty");
+    if (isEmpty(itemData)) new HttpException(400, "userData is empty");
 
     const findItem: Item = await this.items.findUnique({ where: { id: itemId } });
-    if (!findItem) throw new HttpException(409, "User doesn't exist");
+    if (!findItem) new HttpException(409, "User doesn't exist");
     if(itemData.categoriesId){ // вынести в utils?
       await this.categoriesService.checkCategories(itemData.categoriesId)
       const categoriesMany: categoryId[] = itemData.categoriesId.map(item => {return {categoryId: item}});
@@ -95,7 +95,7 @@ class itemService {
 
   public async updateItemImage(itemId: number, imageName: string){
     const findItem: Item = await this.items.findUnique({ where: { id: itemId } });
-    if (!findItem) throw new HttpException(409, "User doesn't exist");
+    if (!findItem) new HttpException(409, "User doesn't exist");
 
     return this.items.update({where: {id: itemId}, data: {image: imageName}});
   }

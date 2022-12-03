@@ -7,7 +7,7 @@ const authMiddleware = catchAsync(async (req: Request, res: Response, next: Next
   if (!isProvided) throw new HttpException(401, "Token not provided");
   const providedToken = req.headers.authorization.split(' ')[1];
 
-  if(providedToken !== 'admin') throw new HttpException(401, "Token not accept"); // вынести в 'admin'
+  if(providedToken !== 'admin') next(new HttpException(401, "Token not accept")) // вынести в 'admin'
   next()
 })
 
