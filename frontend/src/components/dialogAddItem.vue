@@ -14,6 +14,16 @@
         <span class="input-group-text" id="addon-wrapping">$</span>
         <input type="number" class="form-control" v-model="item.price" placeholder="price" aria-describedby="addon-wrapping">
       </div>
+      <span>Все выбранные категории добавляются к товару(даже если выбрать их один раз)</span>
+      <div id="v-model-select-dynamic" class="drop--list">
+        <select v-model="selected">
+          <option value="Все категории">Все категории</option>
+          <option v-for="category in categories" :key="category.id" class="option">
+            {{ category.title }}
+          </option>
+        </select>
+        <span style="margin-left: 10px; font-size: 20px">Выбрано: {{ selected }}</span>
+      </div>
       <button class="btn btn-primary btm--margin" @click="addItem">Создать товар</button>
       <h3 v-if="visible" style="color: purple; margin: 10% auto; width: 50%; font-size: 25px">Выберите все пункты!!!</h3>
     </div>
@@ -27,6 +37,8 @@ export default {
   name: "dialogAddItem",
   data(){
     return{
+      selected: '',
+      categories: [],
       visible: false,
       item: {
         title: '',
@@ -41,6 +53,16 @@ export default {
       default: false,
     },
   },
+  async created() {
+    await axios.get(process.env.BACKEND_URL + 'api/category')
+        .then(res => {
+          this.categories = res.data.data.categories
+        })
+        .catch(e => {
+          alert('Ошибка запроса')
+          console.log(e)
+        })
+  },
   methods: {
     hideDialog() {
       this.$emit('update:show', false);
@@ -50,17 +72,26 @@ export default {
         this.visible = true
         return
       }
-      await axios.post(process.env.BACKEND_URL + 'api/items', this.item)
+
+      const headers = {headers: {authorization: `Bearer ${JSON.parse(localStorage.getItem('authToken'))}`}};
+      await axios.post(process.env.BACKEND_URL + 'api/items', this.item, headers)
           .then(() => {
             this.item.title = '';
             this.item.description = '';
             this.item.price = 0;
+            delete this.item.categoriesId
             this.$emit('update:show', false);
           })
           .catch(e => {
             alert('запрос с ошибкой')
             console.log(e)
           })
+    }
+  },
+  watch: {
+    selected(newValue){
+      const category = this.categories.find(category => category.title === newValue);
+      this.item.categoriesId = this.item.categoriesId ? [...this.item.categoriesId, category.id] : [category.id]
     }
   }
 }

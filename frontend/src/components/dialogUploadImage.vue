@@ -45,7 +45,8 @@ export default {
       }
       let data = new FormData();
       data.append('image', this.image);
-      await axios.put(process.env.BACKEND_URL + `api/items/image/${this.itemId}`, data)
+      const headers = {headers: {authorization: `Bearer ${JSON.parse(localStorage.getItem('authToken'))}`}};
+      await axios.put(process.env.BACKEND_URL + `api/items/image/${this.itemId}`, data, headers)
           .then(() => {
             this.image = ''
             this.$emit('update:show', false);

@@ -35,7 +35,8 @@ export default {
       this.$emit('update:show', false)
     },
     async addCategory(){
-      await axios.post(process.env.BACKEND_URL + 'api/category', {title: this.title})
+      const headers = {headers: {authorization: `Bearer ${JSON.parse(localStorage.getItem('authToken'))}`}};
+      await axios.post(process.env.BACKEND_URL + 'api/category', {title: this.title}, headers)
           .then(() => {
             this.title = ''
             this.$emit('update:show', false)

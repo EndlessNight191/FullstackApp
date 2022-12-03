@@ -1,6 +1,6 @@
 <template>
-  <button  class="btn btn-dark" @click="dialogVisibleUpdateCategory=true">{{this.category.category.title}}</button>
-  <dialogUpdateCategory v-model:show="dialogVisibleUpdateCategory" :categoryId="category.category.id" :titles="this.category.category.title"/>
+  <button  class="btn btn-dark btm--margin--width" @click="dialogVisibleUpdateCategory=true">{{this.category.category.title}}</button>
+  <dialogUpdateCategory v-if="authAdmin.value" v-model:show="dialogVisibleUpdateCategory" :categoryId="category.category.id" :titles="this.category.category.title"/>
 </template>
 
 <script>
@@ -11,6 +11,7 @@ export default {
   components:{
     dialogUpdateCategory
   },
+  inject: ['authAdmin'],
   props: {
     category: Object
   },

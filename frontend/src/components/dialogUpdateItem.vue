@@ -14,7 +14,7 @@
         <span class="input-group-text" id="addon-wrapping">$</span>
         <input type="number" class="form-control" v-model="items.price" placeholder="price" aria-describedby="addon-wrapping">
       </div>
-      <span>Если вы выберите хоть один тэг, то существующие удаляться, все выбранные теги добавятся к товару</span>
+      <span>Если вы выберите хоть одну категорию, то существующие удаляться, все выбранные категории добавляются к товару</span>
       <div id="v-model-select-dynamic" class="drop--list">
         <select v-model="selected">
           <option value="Все категории">Все категории</option>
@@ -69,7 +69,15 @@ export default {
         this.visible = true
         return
       }
-      await axios.put(process.env.BACKEND_URL + `api/items/${this.item.id}`, this.title)
+
+      const itemData = {
+        title: this.items.title,
+        description: this.items.description,
+        price: this.items.price,
+      };
+      if(this.items.categoriesId) itemData.categoriesId = this.items.categoriesId;
+      const headers = {headers: {authorization: `Bearer ${JSON.parse(localStorage.getItem('authToken'))}`}};
+      await axios.put(process.env.BACKEND_URL + `api/items/${this.item.id}`, itemData, headers)
           .then(() => {
             this.$emit('update:show', false);
             this.$router.go(this.$router.currentRoute);
@@ -82,7 +90,8 @@ export default {
   },
   watch: {
     selected(newValue){
-      this.items.categoriesId = this.items.categoriesId ? [...this.items.categoriesId, newValue] : [newValue]
+      const category = this.categories.find(category => category.title === newValue);
+      this.items.categoriesId = this.items.categoriesId ? [...this.items.categoriesId, category.id] : [category.id]
     }
   }
 }

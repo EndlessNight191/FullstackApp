@@ -2,8 +2,8 @@
   <div class="container item-page">
     <itemCard v-if="see" :item="item"/>
     <div class="btn-item--page">
-      <button class="btn btn-primary btm--margin" @click="dialogVisibleUpdateItem=true">Изменить товар</button>
-      <button class="btn btn-primary btm--margin" @click="dialogVisibleUploadImage=true">Загрузить картинку</button>
+      <button v-if="authAdmin.value" class="btn btn-primary btm--margin" @click="dialogVisibleUpdateItem=true">Изменить товар</button>
+      <button v-if="authAdmin.value" class="btn btn-primary btm--margin" @click="dialogVisibleUploadImage=true">Загрузить картинку</button>
     </div>
   </div>
   <dialogUpdateItem  :item="item" v-model:show="dialogVisibleUpdateItem"/>
@@ -24,6 +24,7 @@ export default {
     dialogUpdateItem,
     dialogUploadImage
   },
+  inject: ['authAdmin'],
   data(){
     return{
       dialogVisibleUpdateItem: false,

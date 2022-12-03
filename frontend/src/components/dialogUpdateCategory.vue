@@ -40,7 +40,8 @@ export default {
         this.visible = true
         return
       }
-      await axios.put(process.env.BACKEND_URL + `api/category/${this.categoryId}`, {title: this.title})
+      const headers = {headers: {authorization: `Bearer ${JSON.parse(localStorage.getItem('authToken'))}`}};
+      await axios.put(process.env.BACKEND_URL + `api/category/${this.categoryId}`, {title: this.title}, headers)
           .then(() => {
             this.title = '';
             this.$emit('update:show', false);
