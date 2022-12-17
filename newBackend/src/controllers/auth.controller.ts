@@ -14,6 +14,10 @@ class AuthController {
     return resSend(res, {data: {auth: true}});
   })
 
+  public refreshToken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+    return resSend(res, {data: {authToken: 'asd', refreshToken: ''}});
+  })
 
 }
 
